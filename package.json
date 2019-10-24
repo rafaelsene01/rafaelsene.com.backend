@@ -4,7 +4,8 @@
   "main": "index.js",
   "author": "Rafael Sene",
   "scripts": {
-    "start": "node sucrase-node src/index.js",
+    "prestart": "sucrase ./src -d ./dist --transforms imports",
+    "start": "node dist/index.js",
     "dev": "nodemon src/index.js"
   },
   "license": "MIT",
