@@ -1,11 +1,11 @@
 const express = require("express");
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 
 const HomeController = require("./controller/HomeController");
 
 const routes = new express.Router();
-routes.use(bodyParser.json());
-routes.use(bodyParser.urlencoded({ extended: true }));
+// routes.use(bodyParser.json());
+// routes.use(bodyParser.urlencoded({ extended: true }));
 
 routes.get("/", HomeController.getText);
 routes.get("/:_id", HomeController.getText);
