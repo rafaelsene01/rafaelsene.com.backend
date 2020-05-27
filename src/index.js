@@ -1,45 +1,18 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
+require("envkey");
 
-const app = express();
+import { ApolloServer } from "apollo-server";
+import mongoose from "mongoose";
 
-const server = require("http").Server(app);
-const io = require("socket.io")(server);
+import schema from "./modules";
 
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
-  .then(() => console.log("DB Connected!"))
-  .catch(err => {
-    console.log(`DB Connection Error: ${err.message}`);
-  });
-
-app.use((req, res, next) => {
-  req.io = io;
-
-  next();
+const server = new ApolloServer({
+  schema,
+  playground: process.env.NODE_ENV === "development",
 });
 
-app.use(cors());
-app.use(express.json());
-
-app.use(require("./routes"));
-
-const port = normalizaPort(process.env.PORT || "3333");
-
-function normalizaPort(val) {
-  const port = parseInt(val, 10);
-  if (isNaN(port)) {
-    return val;
-  }
-  if (port >= 0) {
-    return port;
-  }
-  return false;
-}
-server.listen(port, function() {
-  console.log(`app listening on http://localhost:${port}`);
+mongoose.connect(process.env.MONGO_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
+
+export default server;
